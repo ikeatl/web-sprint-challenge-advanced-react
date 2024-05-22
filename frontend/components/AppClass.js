@@ -71,7 +71,6 @@ export default class AppClass extends React.Component {
     // This event handler can use the helper above to obtain a new index for the "B",
     // and change any states accordingly.
 
-    console.log(direction)
     if (direction === "up") {
       if (this.state.index === 1 || this.state.index === 2 || this.state.index === 3) {
         this.setState({
