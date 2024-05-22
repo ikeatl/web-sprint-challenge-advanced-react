@@ -9,17 +9,18 @@ import axios from 'axios'
 const initialMessage = ''
 const initialEmail = ''
 const initialSteps = 0
-const initialIndex = 5 // the index the "B" is at
+const initialIndex = 4 // the index the "B" is at
+const initialCoordinates = {
+  x: 2,
+  y: 2
+}
 
 const initialState = {
   message: initialMessage,
   email: initialEmail,
   index: initialIndex,
   steps: initialSteps,
-}
-const initialCoordinates = {
-  x: 2,
-  y: 2
+  coordinates: initialCoordinates,
 }
 
 export default class AppClass extends React.Component {
@@ -41,8 +42,8 @@ export default class AppClass extends React.Component {
   getXY = () => {
     // It it not necessary to have a state to track the coordinates.
     // It's enough to know what index the "B" is at, to be able to calculate them.
-    const x = ((this.state.index - 1) % 3) + 1
-    const y = Math.floor((this.state.index - 1) / 3) + 1
+    const x = (this.state.index % 3) + 1
+    const y = (Math.floor(this.state.index / 3)) + 1;
     this.setState({ coordinates: { x, y } })
     return { x, y }
   }
@@ -72,61 +73,60 @@ export default class AppClass extends React.Component {
     // and change any states accordingly.
 
     if (direction === "up") {
-      if (this.state.index === 0 || this.state.index === 1 || this.state.index === 2) {
+      // Update index and calculate new coordinates for "B"
+      if (this.state.index > 2) {
+        this.setState(prevState => ({
+          steps: prevState.steps + 1,
+          index: prevState.index - 3
+        }), () => {
+          this.getXY();
+        });
+      } else {
         this.setState({
           message: "You can't go up"
-        })
+        });
       }
-      else {
-        this.setState({
-          steps: this.state.steps + 1,
-          index: this.state.index - 3
-        })
-      }
-    }
-
-    else if (direction === "down") {
-      if (this.state.index === 6 || this.state.index === 7 || this.state.index === 8) {
+    } else if (direction === "down") {
+      if (this.state.index < 6) {
+        this.setState(prevState => ({
+          steps: prevState.steps + 1,
+          index: prevState.index + 3
+        }), () => {
+          this.getXY();
+        });
+      } else {
         this.setState({
           message: "You can't go down"
-        })
+        });
       }
-      else {
-        this.setState({
-          steps: this.state.steps + 1,
-          index: this.state.index + 3
-        })
-      }
-    }
-
-    else if (direction === "right") {
-      if (this.state.index === 2 || this.state.index === 5 || this.state.index === 8) {
-        this.setState({
-          message: "You can't go right"
-        })
-      }
-      else {
-        this.setState({
-          steps: this.state.steps + 1,
-          index: this.state.index + 1
-        })
-      }
-    }
-
-    else if (direction === "left") {
-      if (this.state.index === 0 || this.state.index === 3 || this.state.index === 6) {
+    } else if (direction === "left") {
+      if (this.state.index % 3 !== 0) {
+        this.setState(prevState => ({
+          steps: prevState.steps + 1,
+          index: prevState.index - 1
+        }), () => {
+          this.getXY();
+        });
+      } else {
         this.setState({
           message: "You can't go left"
-        })
+        });
       }
-      else {
+    } else if (direction === "right") {
+      if ((this.state.index + 1) % 3 !== 0) {
+        this.setState(prevState => ({
+          steps: prevState.steps + 1,
+          index: prevState.index + 1
+        }), () => {
+          this.getXY();
+        });
+      } else {
         this.setState({
-          steps: this.state.steps + 1,
-          index: this.state.index - 1
-        })
+          message: "You can't go right"
+        });
       }
     }
-    this.getXY()
+
   }
 
   onChange = (evt) => {
@@ -165,7 +165,7 @@ export default class AppClass extends React.Component {
         </div>
         <div id="grid">
           {
-            [1, 2, 3, 4, 5, 6, 7, 8, 9].map(idx => (
+            [0, 1, 2, 3, 4, 5, 6, 7, 8].map(idx => (
               <div key={idx} className={`square${idx === this.state.index ? ' active' : ''}`}>
                 {idx === this.state.index ? 'B' : null}
               </div>
