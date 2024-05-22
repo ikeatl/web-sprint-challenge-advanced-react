@@ -72,7 +72,7 @@ export default class AppClass extends React.Component {
     // and change any states accordingly.
 
     if (direction === "up") {
-      if (this.state.index === 1 || this.state.index === 2 || this.state.index === 3) {
+      if (this.state.index === 0 || this.state.index === 1 || this.state.index === 2) {
         this.setState({
           message: "You can't go up"
         })
@@ -86,7 +86,7 @@ export default class AppClass extends React.Component {
     }
 
     else if (direction === "down") {
-      if (this.state.index === 7 || this.state.index === 8 || this.state.index === 9) {
+      if (this.state.index === 6 || this.state.index === 7 || this.state.index === 8) {
         this.setState({
           message: "You can't go down"
         })
@@ -100,7 +100,7 @@ export default class AppClass extends React.Component {
     }
 
     else if (direction === "right") {
-      if (this.state.index === 3 || this.state.index === 6 || this.state.index === 9) {
+      if (this.state.index === 2 || this.state.index === 5 || this.state.index === 8) {
         this.setState({
           message: "You can't go right"
         })
@@ -114,7 +114,7 @@ export default class AppClass extends React.Component {
     }
 
     else if (direction === "left") {
-      if (this.state.index === 1 || this.state.index === 4 || this.state.index === 7) {
+      if (this.state.index === 0 || this.state.index === 3 || this.state.index === 6) {
         this.setState({
           message: "You can't go left"
         })
